@@ -3,52 +3,48 @@
 
 using namespace std;
 
-int main() 
+int main()
 {
     double a, b, c, discriminant, x1, x2;
 
-    cout << "Enter coefficient a: ";
-    cin >> a;
-    cout << "Enter coefficient b: ";
-    cin >> b;
-    cout << "Enter coefficient c: ";
-    cin >> c;
+    cout << "Enter coefficients a, b, and c: ";
+    cin >> a >> b >> c;
 
-    if (a == 0) 
+    if (a == 0)
     {
         cout << "Error: 'a' cannot be zero in a quadratic equation." << endl;
-        return 1;
     }
-
-    discriminant = b*b - 4*a*c;
-
-    if (discriminant < 0)
+    else
     {
-        cout << "No real roots exist." << endl;
-    }
-    else 
-    {
-        if (b*b >= 10 * (4*a*c))
+        discriminant = b*b - 4*a*c;
+
+        if (discriminant < 0)
         {
-            x1 = (-b - copysign(1.0, b) * sqrt(discriminant)) / (2 * a);
-            x2 = c / (a * x1);
-            cout << "x1 = " << x1 << endl;
-            cout << "x2 = " << x2 << endl;
+            cout << "No real roots exist." << endl;
         }
-        else 
+        else
         {
-            if (discriminant == 0)
+            if (b != 0 && b*b > 20 * (4*a*c))
             {
-                x1 = -b / (2 * a);
-                cout << "x1 = x2 = " << x1 << endl;
+                x1 = (-b - (b / abs(b)) * sqrt(discriminant)) / (2 * a);
+                x2 = c / (a * x1);
             }
             else
             {
-                x1 = (-b + sqrt(discriminant)) / (2 * a);
-                x2 = (-b - sqrt(discriminant)) / (2 * a);
-                cout << "x1 = " << x1 << endl;
-                cout << "x2 = " << x2 << endl;
+                if (discriminant == 0)
+                {
+                    x1 = -b / (2 * a);
+                    x2 = x1;
+                }
+                else
+                {
+                    x1 = (-b + sqrt(discriminant)) / (2 * a);
+                    x2 = (-b - sqrt(discriminant)) / (2 * a);
+                }
             }
+            
+            cout << "x1 = " << x1 << endl;
+            cout << "x2 = " << x2 << endl;
         }
     }
 
