@@ -3,38 +3,40 @@
 
 using namespace std;
 
-int main() 
+int main()
 {
-    double height = 0.0, ratio = 0.0, totalDistance = 0.0;
+    double h;
+    double r;
+    double totalDistance;
 
-    cout << "Enter the initial height of the bouncing ball: ";
-    cin >> height;
-
-    cout << "Enter the bouncing ratio: ";
-    cin >> ratio;
-
-    if (height <= 0) 
+    do
     {
-        cout << "\nError: Height must be a positive number." << endl;
-        return 1;
+        cout << "Enter the initial height (h > 0): ";
+        cin >> h;
     }
+    while (h <= 0);
 
-    if (ratio < 0 || ratio >= 1) 
+    do
     {
-        cout << "\nError: The ratio must be between 0 and 1." << endl;
-        return 1;
+        cout << "Enter the bouncing ratio (0 <= r < 1): ";
+        cin >> r;
     }
+    while (r < 0 || r >= 1);
 
-    totalDistance = height;
-    
-    while ((height * ratio) > 1e-12) 
+    totalDistance = h;
+
+    if (r > 0)
     {
-        height *= ratio;
-        totalDistance += 2 * height;
+        do
+        {
+            h = h * r;
+            totalDistance = totalDistance + (h * 2);
+        }
+        while (h > 0);
     }
 
     cout << fixed << setprecision(4);
-    cout << "\nTotal distance traveled: " << totalDistance << " units" << endl;
+    cout << "\nTotal distance traveled: " << totalDistance << endl;
 
     return 0;
 }
