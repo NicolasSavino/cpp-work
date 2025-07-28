@@ -1,8 +1,8 @@
 /*
  Name: Nicolas Savino
- Assignment: hw5.cpp
- Due Date: 07/30/2025
+ Assignment: hw4.cpp
 */
+Due Date: 07/30/2025
 
 #include <iostream>
 #include <iomanip>
@@ -12,6 +12,15 @@
 
 using namespace std;
 
+// Global variables for the problem's given parameters.
+double OFFSHORE_DISTANCE = 8.0;
+double INLAND_DISTANCE = 6.0;
+double TOTAL_COAST_DISTANCE = 15.0;
+
+double ROWING_SPEED = 3.0;
+double BEACH_SPEED = 5.0;
+double INLAND_SPEED = 4.0;
+
 // Function to calculate the total travel time for a given path (x, y, z)
 double calculateTime (double x, double y, double z);
 
@@ -20,19 +29,15 @@ int main ()
     // Seed the random number generator to ensure different results each run
     srand(time(0));
 
-    // Variables to store the components of the path
+    // Variables for path distances and random fractions
     double x, y, z;
-
-    // Variables for generating random fractions
     double f1, f2, f3, f_sum;
 
-    // Variables to track the current time and the minimum time found so far
-    double currentTime = 0.0;
-    // Initialize minTime to a very large value to ensure the first calculation is smaller
-    double minTime = 1000.0; 
+    // Variables to track the best time found
+    double currentTime;
+    double minTime = 1000.0; // Initialize to a large value
 
-    // Define the number of trials for the simulation.
-    // A larger number increases the chance of finding a better result.
+    // Define the number of trials for the simulation
     long long numberOfTrials = 20000000;
 
     // Set output formatting for floating-point numbers
@@ -45,27 +50,24 @@ int main ()
     cout << "x (miles)\ty (miles)\tz (miles)\tTime (hours)" << endl;
     cout << "--------------------------------------------------------" << endl;
 
-
     // Main simulation loop
     for (long long i = 0; i < numberOfTrials; ++i)
     {
-        // Generate three random fractions between 0.0 and 1.0
+        // Generate three random fractions
         f1 = static_cast<double>(rand()) / RAND_MAX;
         f2 = static_cast<double>(rand()) / RAND_MAX;
         f3 = static_cast<double>(rand()) / RAND_MAX;
         f_sum = f1 + f2 + f3;
 
-        // Avoid division by zero, though it's highly unlikely
         if (f_sum == 0)
         {
             continue;
         }
 
-        // Calculate x, y, and z based on the random fractions.
-        // This method ensures x + y + z always equals 15.
-        x = 15.0 * (f1 / f_sum);
-        y = 15.0 * (f2 / f_sum);
-        z = 15.0 * (f3 / f_sum);
+        // Calculate x, y, and z, ensuring they sum to TOTAL_COAST_DISTANCE
+        x = TOTAL_COAST_DISTANCE * (f1 / f_sum);
+        y = TOTAL_COAST_DISTANCE * (f2 / f_sum);
+        z = TOTAL_COAST_DISTANCE * (f3 / f_sum);
 
         // Calculate the travel time for the current path
         currentTime = calculateTime(x, y, z);
@@ -87,14 +89,14 @@ int main ()
 
 double calculateTime (double x, double y, double z)
 {
-    // Time rowing from Boat to C: distance / speed = sqrt(8^2 + x^2) / 3
-    double timeRowing = sqrt(64.0 + x * x) / 3.0;
+    // Time rowing: distance / speed
+    double timeRowing = sqrt(pow(OFFSHORE_DISTANCE, 2) + pow(x, 2)) / ROWING_SPEED;
 
-    // Time running on beach from C to D: distance / speed = y / 5
-    double timeOnBeach = y / 5.0;
+    // Time on beach: distance / speed
+    double timeOnBeach = y / BEACH_SPEED;
 
-    // Time running inland from D to Hotel: distance / speed = sqrt(6^2 + z^2) / 4
-    double timeInland = sqrt(36.0 + z * z) / 4.0;
+    // Time inland: distance / speed
+    double timeInland = sqrt(pow(INLAND_DISTANCE, 2) + pow(z, 2)) / INLAND_SPEED;
 
     return timeRowing + timeOnBeach + timeInland;
 }
