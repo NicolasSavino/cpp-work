@@ -8,14 +8,18 @@
 
 #include <iostream>
 #include <iomanip> // Required for setw()
+#include <ctime>   // Required for time()
 
 using namespace std;
 
-double random(unsigned int& seed);
+// Function provided by professor
+double random(unsigned int &seed);
 
 int main()
 {
-    unsigned int seed;
+    // Seed the random number generator with the current system time
+    unsigned int seed = static_cast<unsigned int>(time(NULL));
+
     int generated_number, count_of_fives = 0, numbers_on_line = 0;
 
     const int LOWER_BOUND = 5;
@@ -23,17 +27,15 @@ int main()
     const int TARGET_VALUE = 5;
     const int TARGET_COUNT = 6;
     const int NUMBERS_PER_LINE = 10;
-    const int FIELD_WIDTH = 3; // Width for each number column
+    const int FIELD_WIDTH = 4; // Adjusted for perfect spacing
 
-    cout << "Please enter a non-negative integer for the seed: ";
-    cin >> seed;
-    cout << endl;
+    cout << "The program will now generate random numbers..." << endl << endl;
 
     while (count_of_fives < TARGET_COUNT)
     {
         generated_number = static_cast<int>(random(seed) * (UPPER_BOUND - LOWER_BOUND + 1)) + LOWER_BOUND;
 
-        // Use setw() to align numbers in columns
+        // Use setw() to align numbers in perfectly spaced columns
         cout << setw(FIELD_WIDTH) << generated_number;
         numbers_on_line++;
 
@@ -53,25 +55,22 @@ int main()
     return 0;
 }
 
-double random(unsigned int& seed)
+double random(unsigned int &seed)
 {
-    const int MODULUS = 15749;
-    const int MULTIPLIER = 69069;
-    const int INCREMENT = 1;
+   const int MODULUS = 15749;
+   const int MULTIPLIER = 69069;
+   const int INCREMENT = 1;
 
-    seed = ((MULTIPLIER * seed) + INCREMENT) % MODULUS;
-
-    return static_cast<double>(seed) / MODULUS;
+   seed = ((MULTIPLIER * seed) + INCREMENT) % MODULUS;
+   return double(seed) / MODULUS;
 }
 
 /*
-    Sample Output:
+    Sample Output (numbers will vary on each run):
 
-    Please enter a non-negative integer for the seed: 42
+    The program will now generate random numbers...
 
-      8 10  5  7  9  6  8 10  5  7
-      9  6  8 10  5  7  9  6  8 10
-      5  7  9  6  8 10  5  7  9  6
-
-    Program finished after generating 6 fives.
+       9   7   5   8   6  10   7   5   9   7
+      10   8   6   5   8   6  10   7   5   9
+       7  10   8   6   5   8   6  10   7   5
 */
