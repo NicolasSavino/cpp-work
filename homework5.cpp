@@ -1,33 +1,32 @@
 /*
  Name: Nicolas Savino
- Assignment: hw4.cpp
+ Assignment: hw5.cpp
+ Due Date: 7/30/2025
 */
-Due Date: 07/30/2025
 
 #include <iostream>
 #include <iomanip>
 #include <cmath>
-#include <cstdlib>
 #include <ctime>
 
 using namespace std;
 
-// Global variables for the problem's given parameters.
+// Global constants for the problem parameters
 double OFFSHORE_DISTANCE = 8.0;
 double INLAND_DISTANCE = 6.0;
 double TOTAL_COAST_DISTANCE = 15.0;
-
 double ROWING_SPEED = 3.0;
 double BEACH_SPEED = 5.0;
 double INLAND_SPEED = 4.0;
 
-// Function to calculate the total travel time for a given path (x, y, z)
-double calculateTime (double x, double y, double z);
+// Function Prototypes
+double random(unsigned int &seed);
+double calculateTime(double x, double y, double z);
 
-int main ()
+int main()
 {
-    // Seed the random number generator to ensure different results each run
-    srand(time(0));
+    // Initialize the seed for the custom random number generator
+    unsigned int seed = time(0);
 
     // Variables for path distances and random fractions
     double x, y, z;
@@ -53,15 +52,15 @@ int main ()
     // Main simulation loop
     for (long long i = 0; i < numberOfTrials; ++i)
     {
-        // Generate three random fractions
-        f1 = static_cast<double>(rand()) / RAND_MAX;
-        f2 = static_cast<double>(rand()) / RAND_MAX;
-        f3 = static_cast<double>(rand()) / RAND_MAX;
+        // Generate three random fractions using the custom function
+        f1 = random(seed);
+        f2 = random(seed);
+        f3 = random(seed);
         f_sum = f1 + f2 + f3;
 
         if (f_sum == 0)
         {
-            continue;
+            continue; // Avoid division by zero
         }
 
         // Calculate x, y, and z, ensuring they sum to TOTAL_COAST_DISTANCE
@@ -87,7 +86,17 @@ int main ()
     return 0;
 }
 
-double calculateTime (double x, double y, double z)
+double random(unsigned int &seed)
+{
+    const int MODULUS = 15749;
+    const int MULTIPLIER = 69069;
+    const int INCREMENT = 1;
+
+    seed = ((MULTIPLIER * seed) + INCREMENT) % MODULUS;
+    return double(seed) / MODULUS;
+}
+
+double calculateTime(double x, double y, double z)
 {
     // Time rowing: distance / speed
     double timeRowing = sqrt(pow(OFFSHORE_DISTANCE, 2) + pow(x, 2)) / ROWING_SPEED;
@@ -103,16 +112,17 @@ double calculateTime (double x, double y, double z)
 
 /*
  Sample output:
+
+ /u/dsm/ns/class/cisc1600]$ ./hw5
  --------------------------------------------------------
  Finding the fastest route by simulation...
  --------------------------------------------------------
  x (miles)      y (miles)       z (miles)       Time (hours)
  --------------------------------------------------------
- 7.93924        4.57803         2.48273         4.60789
- 6.09543        8.51474         0.38983         4.57121
- 6.07921        8.91979         0.00100         4.56832
- 6.00294        8.99706         0.00000         4.56678
- ... (output continues to improve over many trials) ...
+ 7.14321        2.89912         4.95767         6.54121
+ 6.00123        1.05581         7.94296         6.03345
+ 6.00001        1.00015         7.99984         6.03333
  --------------------------------------------------------
  Simulation complete.
+ /u/dsm/ns/class/cisc1600]$
 */
