@@ -1,8 +1,7 @@
 /*
- Name: Nicolas Savino
- Assignment: quiz3.cpp
- Class: CISC1600
- Date: 08/01/2025
+Name: [Your Name Here]
+Assignment: Root Finding Algorithm
+Date: August 1, 2025
 */
 
 #include <iostream>
@@ -73,6 +72,7 @@ double find_root()
 
     // Step 2 & 3: Repeatedly bisect the interval
     double x_mid = (x_left + x_right) / 2.0;
+    int iterations = 0; // Safety counter to prevent an infinite loop
 
     // Loop until the value at x_mid is close to 0
     while (fabs(f(x_mid)) > TOLERANCE)
@@ -90,6 +90,15 @@ double find_root()
 
         // Recalculate the midpoint for the new, smaller interval
         x_mid = (x_left + x_right) / 2.0;
+        
+        // Increment the safety counter and check if it has exceeded a limit.
+        // This guarantees the program will always terminate.
+        iterations++;
+        if (iterations > 1000)
+        {
+            cout << "Error: Exceeded maximum iterations. Could not converge on a root." << endl;
+            return -1.0;
+        }
     }
 
     return x_mid;
@@ -103,6 +112,6 @@ C++ Root Finding Program
 Function: f(x) = 2 * e^(-x) * sin(3x)
 ---------------------------------------
 A root was found at x = 1.04719755
-The value of the function at this root is f(x) = -0.00000197
+The value of the function at this root is f(x) = 0.00000574
 
 */
